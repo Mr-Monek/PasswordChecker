@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Password Strength Checker</title>
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -68,46 +67,40 @@
         </ul>
     </div>
 
-    <script type="py">
-        import string
-        from js import document
+    <script>
+        function checkPassword() {
+            let password = document.getElementById("password").value;
+            let strengthRate = 0;
 
-        def checkPassword():
-            password = document.getElementById("password").value
-            strength_rate = 0
+            if (/[A-Z]/.test(password)) strengthRate += 1;
+            if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strengthRate += 1;
+            if (/\d/.test(password)) strengthRate += 1;
+            if (password.length >= 10) strengthRate += 2;
+            else if (password.length >= 7) strengthRate += 1;
 
-            if any(char.isupper() for char in password):
-                strength_rate += 1
-            if any(char in string.punctuation for char in password):
-                strength_rate += 1
-            if any(char.isdigit() for char in password):
-                strength_rate += 1
-            if len(password) >= 10:
-                strength_rate += 2
-            elif len(password) >= 7:
-                strength_rate += 1
+            // Update UI
+            let resultText = `Password Score: ${strengthRate}/5`;
+            let resultElement = document.getElementById("result");
+            let strengthFill = document.getElementById("strength-fill");
 
-            # Update UI
-            result_text = f"Password Score: {strength_rate}/5"
-            result_element = document.getElementById("result")
-            strength_fill = document.getElementById("strength-fill")
-
-            if strength_rate == 5:
-                result_element.innerText = result_text + " - Excellent!"
-                strength_fill.style.width = "100%"
-                strength_fill.style.backgroundColor = "green"
-            elif strength_rate >= 3:
-                result_element.innerText = result_text + " - Good"
-                strength_fill.style.width = "75%"
-                strength_fill.style.backgroundColor = "yellow"
-            elif strength_rate >= 1:
-                result_element.innerText = result_text + " - Weak"
-                strength_fill.style.width = "50%"
-                strength_fill.style.backgroundColor = "orange"
-            else:
-                result_element.innerText = result_text + " - Very Weak"
-                strength_fill.style.width = "25%"
-                strength_fill.style.backgroundColor = "red"
+            if (strengthRate === 5) {
+                resultElement.innerText = resultText + " - Excellent!";
+                strengthFill.style.width = "100%";
+                strengthFill.style.backgroundColor = "green";
+            } else if (strengthRate >= 3) {
+                resultElement.innerText = resultText + " - Good";
+                strengthFill.style.width = "75%";
+                strengthFill.style.backgroundColor = "yellow";
+            } else if (strengthRate >= 1) {
+                resultElement.innerText = resultText + " - Weak";
+                strengthFill.style.width = "50%";
+                strengthFill.style.backgroundColor = "orange";
+            } else {
+                resultElement.innerText = resultText + " - Very Weak";
+                strengthFill.style.width = "25%";
+                strengthFill.style.backgroundColor = "red";
+            }
+        }
     </script>
 </body>
 </html>
